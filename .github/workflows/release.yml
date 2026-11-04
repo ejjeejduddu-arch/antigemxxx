@@ -3,6 +3,7 @@ name: Build & Publish Release
 on:
   push:
     branches:
+      - main
       - master
     paths:
       - 'version.json'
