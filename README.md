@@ -1,173 +1,241 @@
+<div align="center">
+
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/resources/antigravity_banner.png">
-    <img src="docs/resources/antigravity_banner.png" alt="Google Antigravity Banner" width="850">
-  </picture>
+  <img src="docs/resources/antigravity_banner.png" alt="Google Antigravity" width="820">
 </p>
 
-<h1 align="center">AntiGem — Google Antigravity AI & IDE for Android</h1>
+# AntiGem
 
 <p align="center">
-  <strong>The Ultimate Autonomous AI Coding Workspace for Mobile Devices</strong><br>
-  Built with Google Antigravity & Claude Code agents, a full Linux PTY Terminal, Sora Code Editor, and an Agent-Controlled Browser in one unified native Android application.
+  <b>Autonomous AI Coding Workspace and Native Integrated Development Environment for Android</b><br>
+  Built on the Google Antigravity Engine, Wire gRPC Architecture, Embedded Linux PTY Subsystem, and Sora Code Editor.
 </p>
 
 <p align="center">
   <a href="https://github.com/ejjeejduddu-arch/antigemxxx/releases/latest">
-    <img src="https://img.shields.io/github/v/release/ejjeejduddu-arch/antigemxxx?style=for-the-badge&logo=android&logoColor=white&color=34A853&label=Release" alt="Latest Release">
+    <img src="https://img.shields.io/github/v/release/ejjeejduddu-arch/antigemxxx?style=flat-square&logo=android&logoColor=white&color=2ea44f&label=Release" alt="Release">
   </a>
   <a href="https://github.com/ejjeejduddu-arch/antigemxxx/actions/workflows/release.yml">
-    <img src="https://img.shields.io/github/actions/workflow/status/ejjeejduddu-arch/antigemxxx/release.yml?style=for-the-badge&logo=githubactions&logoColor=white&label=CI%20Build" alt="Build Status">
+    <img src="https://img.shields.io/github/actions/workflow/status/ejjeejduddu-arch/antigemxxx/release.yml?style=flat-square&logo=githubactions&logoColor=white&label=Build" alt="Build Status">
   </a>
   <a href="https://developer.android.com/jetpack/compose">
-    <img src="https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white" alt="Jetpack Compose">
+    <img src="https://img.shields.io/badge/Framework-Jetpack%20Compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white" alt="Jetpack Compose">
   </a>
   <a href="https://go.dev">
-    <img src="https://img.shields.io/badge/Bridge-Go%20Runtime-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="Go Bridge">
+    <img src="https://img.shields.io/badge/Runtime-Go%201.22-00ADD8?style=flat-square&logo=go&logoColor=white" alt="Go Runtime">
+  </a>
+  <a href="https://grpc.io">
+    <img src="https://img.shields.io/badge/Protocol-Wire%20gRPC-244c5a?style=flat-square&logo=grpc&logoColor=white" alt="Wire gRPC">
   </a>
   <a href="LICENSE">
-    <img src="https://img.shields.io/badge/License-GPL%20v3-EA4335?style=for-the-badge&logo=gnu&logoColor=white" alt="GPL v3">
+    <img src="https://img.shields.io/badge/License-GPL%20v3-0366d6?style=flat-square&logo=gnu&logoColor=white" alt="GPL v3">
   </a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/ejjeejduddu-arch/antigemxxx/releases/latest"><b>⚡ Download Latest APK</b></a> •
-  <a href="#-key-features"><b>✨ Features</b></a> •
-  <a href="#-screenshots"><b>📱 Screenshots</b></a> •
-  <a href="#-system-architecture"><b>🏗️ Architecture</b></a> •
-  <a href="extension_docs/README.md"><b>🔌 Plugin SDK</b></a>
+  <a href="https://github.com/ejjeejduddu-arch/antigemxxx/releases/latest"><b>Download Binary APK</b></a> |
+  <a href="#system-architecture"><b>Architecture</b></a> |
+  <a href="#core-capabilities"><b>Capabilities</b></a> |
+  <a href="#interface-overview"><b>Screenshots</b></a> |
+  <a href="extension_docs/README.md"><b>Plugin SDK</b></a>
 </p>
+
+</div>
 
 ---
 
-## 📱 Screenshots
+## Technical Specifications
+
+<table>
+  <thead>
+    <tr>
+      <th align="left">Component</th>
+      <th align="left">Technology</th>
+      <th align="left">Implementation Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>AI Agent Core</b></td>
+      <td>Google Antigravity Language Server (gRPC)</td>
+      <td>Binary protocol streaming via Square Wire runtime with suspending RPC calls and background subagent orchestration.</td>
+    </tr>
+    <tr>
+      <td><b>Secondary Agent</b></td>
+      <td>Claude Code CLI Protocol</td>
+      <td>Daemonized process communication over JSON stream protocol with interactive user tool approvals and diff rendering.</td>
+    </tr>
+    <tr>
+      <td><b>Terminal Engine</b></td>
+      <td>Native Termux PTY Subsystem</td>
+      <td>Hardware-accelerated pseudoterminal emulation (v0.118.1), ANSI/xterm-256color support, and persistent background daemons.</td>
+    </tr>
+    <tr>
+      <td><b>Code Editor</b></td>
+      <td>Sora Editor (v0.23.6)</td>
+      <td>High-speed TextMate syntax highlighting for 50+ languages, code folding, bracket matching, and Git status indicators.</td>
+    </tr>
+    <tr>
+      <td><b>Automation Hub</b></td>
+      <td>Model Context Protocol (MCP)</td>
+      <td>Extensible JSON-RPC bridge allowing autonomous tools to inspect DOM trees, capture viewport frames, and manage device assets.</td>
+    </tr>
+    <tr>
+      <td><b>Mathematical Canvas</b></td>
+      <td>JLaTeXMath Native Engine</td>
+      <td>Hardware-accelerated mathematical typography and KaTeX formula rendering directly on Android Canvas with zero WebView overhead.</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Interface Overview
 
 <table>
   <tr>
     <td align="center" width="25%">
-      <img src="docs/resources/chat_screen.jpg" alt="Agent Chat" width="200" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"><br>
-      <b>💬 Autonomous AI Chat</b><br>
-      <sub>Real-time thought stream & diffs</sub>
+      <img src="docs/resources/chat_screen.jpg" alt="Autonomous Chat" width="210"><br><br>
+      <b>Autonomous Agent Console</b><br>
+      <sub>Real-time thought stream, multi-turn reasoning, and live diff inspection</sub>
     </td>
     <td align="center" width="25%">
-      <img src="docs/resources/ide_code_editor.jpg" alt="Code Editor" width="200" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"><br>
-      <b>📝 Sora Code Editor</b><br>
-      <sub>TextMate themes & file tree</sub>
+      <img src="docs/resources/ide_code_editor.jpg" alt="Code Editor" width="210"><br><br>
+      <b>Sora IDE Code Editor</b><br>
+      <sub>TextMate syntax highlighting, multi-tab buffer, and tree explorer</sub>
     </td>
     <td align="center" width="25%">
-      <img src="docs/resources/linux_terminal.jpg" alt="Linux Terminal" width="200" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"><br>
-      <b>💻 Linux PTY Terminal</b><br>
-      <sub>Native Termux session & zsh/bash</sub>
+      <img src="docs/resources/linux_terminal.jpg" alt="Linux Terminal" width="210"><br><br>
+      <b>Native Linux PTY Terminal</b><br>
+      <sub>Direct Termux environment, package managers, and compiler toolchains</sub>
     </td>
     <td align="center" width="25%">
-      <img src="docs/resources/integrated_browser.jpg" alt="Browser" width="200" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"><br>
-      <b>🌐 Agent Browser</b><br>
-      <sub>MCP automation & DOM inspect</sub>
+      <img src="docs/resources/integrated_browser.jpg" alt="Agent Browser" width="210"><br><br>
+      <b>Automated Inspection Browser</b><br>
+      <sub>Agent-controlled DOM inspection, network telemetry, and localhost testing</sub>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="docs/resources/sidebar_navigation.jpg" alt="Sidebar" width="200" style="border-radius: 12px;"><br>
-      <b>📂 Workspace & Chats</b><br>
-      <sub>Instant project switching</sub>
+      <img src="docs/resources/sidebar_navigation.jpg" alt="Sidebar Navigation" width="210"><br><br>
+      <b>Workspace & Session Router</b><br>
+      <sub>Multi-project switching, branch switching, and persistence</sub>
     </td>
     <td align="center">
-      <img src="docs/resources/account_profile_quota.jpg" alt="Profile" width="200" style="border-radius: 12px;"><br>
-      <b>📊 Quota & Telemetry</b><br>
-      <sub>Live token & model monitor</sub>
+      <img src="docs/resources/account_profile_quota.jpg" alt="Telemetry Monitor" width="210"><br><br>
+      <b>Resource & Telemetry Monitor</b><br>
+      <sub>Real-time token utilization, context window limits, and server metrics</sub>
     </td>
     <td align="center">
-      <img src="docs/resources/settings_preferences.jpg" alt="Settings" width="200" style="border-radius: 12px;"><br>
-      <b>⚙️ Preferences & MCP</b><br>
-      <sub>Custom plugins & skills</sub>
+      <img src="docs/resources/settings_preferences.jpg" alt="System Configuration" width="210"><br><br>
+      <b>Advanced Preferences & MCP</b><br>
+      <sub>Plugin catalog, port forwarding, and execution policies</sub>
     </td>
     <td align="center">
-      <img src="docs/resources/antigravity_logo.png" alt="Google Antigravity Icon" width="160"><br>
-      <b>✨ Google Antigravity</b><br>
-      <sub>Original AI Core</sub>
+      <img src="docs/resources/antigravity_logo.png" alt="Google Antigravity Core" width="165"><br><br>
+      <b>Google Antigravity</b><br>
+      <sub>Official integrated AI core engine</sub>
     </td>
   </tr>
 </table>
 
 ---
 
-## 🚀 Key Features
+## Core Capabilities
 
-### 🤖 Dual AI Agent Architecture
-- **Google Antigravity (`agy`) Engine**: Communicates directly with Google Antigravity via high-performance gRPC. Features full structured output streaming, collapsible reasoning/thinking trees, subagent spawning, and tool approval workflows.
-- **Claude Code CLI**: Anthropic's official `claude` CLI daemon embedded seamlessly via stream-json protocol with process isolation.
-- **Dynamic Model Switching**: Switch seamlessly between Gemini 2.5 Flash, Gemini Pro, Claude 3.7 Sonnet, and custom models mid-chat.
+### 1. Google Antigravity AI Engine
+AntiGem integrates directly with the Google Antigravity language server via high-speed gRPC over Unix Domain Sockets and localhost TCP.
+- **Structured Wire Protocol**: Communicates via Wire-generated Kotlin protobuf stubs (`LanguageServerService.proto`), eliminating serialization bottlenecks.
+- **Deep Reasoning Engine**: Renders collapsible agent thinking trees, AST diff inspections, and multi-file code revisions before execution.
+- **Subagent Delegation**: Orchestrates child agents (`research`, `fullstack-builder`, `tester`) running in isolated parallel workspaces.
 
-### 💻 Embedded Native Linux Terminal
-- **Native PTY Emulation**: Powered by Termux's battle-tested terminal engine with full ANSI color support, xterm-256color, and UTF-8.
-- **Background Persistence**: Run long compile tasks, package installations, and Node.js/Python servers in the background without UI freeze.
-- **Termux & Proot Ubuntu**: Direct access to APKs, compilers, git, curl, and python environments inside mobile sandbox.
+### 2. High-Performance Sora Code Editor
+- **Syntax Engine**: Utilizes TextMate grammars supporting Kotlin, Java, Python, Go, Rust, C/C++, TypeScript, HTML/CSS, SQL, JSON, and YAML.
+- **Git Integration**: Built-in visual diff comparison, staging controls, and branch management without external tooling.
+- **Native Canvas LaTeX**: Direct mathematical typesetting using native JLaTeXMath, rendering complex equations without browser lag.
 
-### 📝 Sora Code Editor
-- **Modern Android IDE Experience**: Fast, smooth code editor supporting syntax highlighting for 50+ languages via TextMate grammars.
-- **Integrated Git Client**: Inspect modified files, visual diff viewer, stage changes, and push directly to GitHub.
-- **Mathematical Rendering**: Pure Android Canvas JLaTeXMath renderer for rich LaTeX and KaTeX formulas with zero WebView overhead.
+### 3. Native Linux PTY Terminal
+- **Direct PTY Session**: Integrates Termux's terminal emulator directly into the Jetpack Compose surface.
+- **Shell Support**: Full compatibility with Bash, Zsh, Fish, Node.js, Python, Clang, Rustc, and Git.
+- **Daemon Architecture**: Background terminal sessions remain active while navigating code files or browser tabs.
 
-### 🌐 Autonomous Browser & MCP Hub
-- **Agent Browser Automation**: Allows Antigravity agents to browse the live web, test local web apps (`localhost:port`), take high-res viewport screenshots, and inspect DOM elements.
-- **Custom AntiGem Plugins**: Install and create plugins with Model Context Protocol (MCP) tools and markdown skills.
-- **Google Flow Workflows**: Built-in video studio, script storyboard analyzer, and auto-dispatch media generator.
+### 4. Agent Browser & MCP Automation Hub
+- **Headless & Headed Automation**: Allows AI agents to navigate web targets, fill input parameters, execute synthetic events, and capture full-page viewports.
+- **Custom AntiGem Plugins**: Extensible plugin system to package custom Model Context Protocol tools, markdown skills, and automation scripts.
+- **Google Flow Engine**: Integrated workflows for media generation, storyboard inspection, and automated code review pipelines.
 
 ---
 
-## 📦 Installation & Quick Start
+## System Architecture
 
-### 1. Download APK
-Get the verified release directly from the repository:
-- **[Download antiGem-termux-v1.0.20-release.apk](https://github.com/ejjeejduddu-arch/antigemxxx/releases/latest)**
+```
++-------------------------------------------------------------------------+
+|                  AntiGem Android Client (Jetpack Compose)               |
++--------------------+--------------------+-------------------------------+
+|   Agent Console    |  Sora Code Editor  |     Linux PTY Terminal        |
++--------------------+--------------------+-------------------------------+
+          |                   |                           |
+          v                   v                           v
++--------------------+ +--------------------+ +---------------------------+
+|  Wire gRPC Client  | | TextMate Grammar   | |  libtermux.so Native PTY  |
++--------------------+ +--------------------+ +---------------------------+
+          |                                               |
+          v                                               v
++-------------------------------------------+ +---------------------------+
+|   agy_ide_bridge (Go Native Daemon)       | | Termux Linux Environment  |
+|   - LanguageServerService (Protobuf)      | | - Compilers & Toolchains  |
+|   - Claude Code stream-json Relay         | | - Local Web Servers       |
+|   - MCP Tool & Plugin Hub                 | | - Package Managers        |
++-------------------------------------------+ +---------------------------+
+```
 
-### 2. Install on Android
-1. Open the downloaded APK file and tap **Install** (Enable *"Install unknown apps"* if prompted).
-2. Launch **AntiGem** and follow the 1-click initial setup.
+---
 
-### 3. Quick Connect to Termux (Optional)
-If running with external Termux:
+## Installation & Deployment
+
+### Direct APK Installation
+Download the official release APK built directly via GitHub Actions:
+
+- **Download Link**: [antiGem-termux-v1.0.20-release.apk](https://github.com/ejjeejduddu-arch/antigemxxx/releases/download/v1.0.20/antiGem-termux-v1.0.20-release.apk)
+- **Minimum Android Version**: Android 8.0 (API Level 26)
+- **Target Android Version**: Android 14+ (API Level 34/36)
+- **Supported Architectures**: `arm64-v8a`, `armeabi-v7a`, `x86_64`, `x86`
+
+### Building from Source
+
+Ensure Android SDK API 36, JDK 21, and Go 1.22+ are installed:
+
 ```bash
-# In Termux terminal
-pkg update && pkg install openssh git gh
-sshd
+git clone https://github.com/ejjeejduddu-arch/antigemxxx.git
+cd antigemxxx
+
+chmod +x gradlew scripts/build_all_apks.sh
+
+# Build Release APKs
+./scripts/build_all_apks.sh --release
 ```
 
----
-
-## 🏗️ System Architecture
-
-```mermaid
-graph TD
-    A["Android UI (Jetpack Compose)"] --> B["AI Agent Orchestrator"]
-    B --> C["Google Antigravity gRPC Bridge"]
-    B --> D["Claude Code Stream Daemon"]
-    B --> E["MCP Tool Hub"]
-    E --> F["Embedded Linux Terminal (PTY)"]
-    E --> G["In-App WebView Browser"]
-    E --> H["Sora File & Code Editor"]
-    C --> I["agy_ide_bridge (Native Go binary)"]
-    F --> J["Termux Sandbox / Proot Ubuntu"]
-```
+Generated APKs will be placed in the `output/` directory:
+- `output/antiGem-termux-v1.0.20-release.apk`
+- `output/antiGem-standard-v1.0.20-release.apk`
 
 ---
 
-## 🛠️ Tech Stack & Dependencies
+## Security and Verification
 
-- **Framework**: Kotlin 2.1, Jetpack Compose, Material 3
-- **IDE Bridge**: Go 1.22 (`agy_ide_bridge` compiled with `-ldflags="-s -w"`)
-- **Networking & Serialization**: OkHttp 4.12, Kotlinx Serialization, Wire gRPC
-- **Terminal View**: Termux Terminal Emulator Engine (`terminal-emulator:v0.118.1`)
-- **Editor**: Sora Editor (`io.github.Rosemoe.sora-editor:editor:0.23.6`)
-- **Image & Renderers**: Coil Compose, JLaTeXMath Canvas, Markwon
+All release builds are compiled in clean, isolated GitHub Actions Ubuntu runners and cryptographically signed with RSA 2048-bit keys:
+
+- **Keystore Type**: PKCS#12 / JKS
+- **Signature Scheme**: APK Signature Scheme v2 & v3
+- **R8 / Proguard**: Stripped debug logs, class obfuscation, and Dead Code Elimination (DCE) enabled
 
 ---
 
-## 📄 License
+## License
 
-AntiGem is open-source software licensed under the **GNU General Public License v3.0 (GPLv3)**.  
-See the [LICENSE](LICENSE) file for complete details.
+AntiGem is licensed under the **GNU General Public License v3.0 (GPLv3)**.  
+See the [LICENSE](LICENSE) file for terms and conditions.
 
-<p align="center">
-  <sub>Built with ❤️ for mobile developers and AI enthusiasts by <a href="https://github.com/ejjeejduddu-arch">ejjeejduddu-arch</a></sub>
-</p>
+<div align="center">
+  <sub>Maintained by <a href="https://github.com/ejjeejduddu-arch">ejjeejduddu-arch</a> • Engineered with Google Antigravity & Kotlin Jetpack Compose</sub>
+</div>
