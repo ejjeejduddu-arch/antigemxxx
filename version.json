@@ -1,10 +1,10 @@
 {
-  "version_code": 120,
-  "version_name": "1.0.20",
+  "version_code": 121,
+  "version_name": "1.0.21",
   "min_supported_version_code": 1,
   "changelog": [
-    "AntiGem Standalone Release v1.0.20",
-    "Compiled with latest Google Flow extensions and Termux Go bridge"
+    "Google Authentication launch screen with Material 3 styling and direct OAuth 2.0 PKCE",
+    "Unified Google Sign-In with local callback verification, manual token fallback, and offline workspace entry"
   ],
   "is_critical": false
 }

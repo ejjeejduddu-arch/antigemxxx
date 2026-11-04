@@ -131,7 +131,8 @@ fun ChatScreen(
     onMinimizeWindow: () -> Unit = {},
     onNavigateToIde: () -> Unit = {},
     onNavigateToTerminal: () -> Unit = {},
-    onNavigateToBrowser: () -> Unit = {}
+    onNavigateToBrowser: () -> Unit = {},
+    onOpenGoogleAuth: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -373,7 +374,7 @@ fun ChatScreen(
             isAuthBusy = isAuthBusy,
             inStartupGrace = isInitialGracePeriod,
             serverRestarting = serverRestarting,
-            onSignIn = { viewModel.loginToAgyHub(force = true) },
+            onSignIn = onOpenGoogleAuth,
             onCheckAuth = { viewModel.checkAgyAuthStatus(userInitiated = true) },
             onRetry = {
                 com.example.gemini.ui.components.AppToastHelper.showToast("Reconnecting to Antigravity…", com.example.gemini.ui.components.ChatToastType.INFO)
@@ -980,9 +981,7 @@ fun ChatScreen(
                 },
                 authInfo = agyAuthInfo,
                 isAuthBusy = isAuthBusy,
-                onLogin = {
-                    viewModel.loginToAgyHub(force = true)
-                },
+                onLogin = onOpenGoogleAuth,
                 onLogout = {
                     viewModel.logoutFromAgyHub()
                 },
@@ -1425,7 +1424,7 @@ fun ChatScreen(
                                     com.example.gemini.data.remote.SystemStatus.UNAUTHENTICATED -> {
                                         if (isNetworkConnected) {
                                             com.example.gemini.ui.components.NewChatSignInPromptCard(
-                                                onSignInClick = { viewModel.loginToAgyHub(force = true) }
+                                                onSignInClick = onOpenGoogleAuth
                                             )
                                         }
                                     }
@@ -2161,11 +2160,7 @@ fun ChatScreen(
             terminalTheme = terminalTheme,
             isLocalToolsEnabled = isLocalToolsEnabled,
             isLocalToolsInstalled = isLocalToolsInstalled,
-            onLoginWithGoogle = {
-                val url = viewModel.getGoogleOAuthUrl()
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                context.startActivity(intent)
-            },
+            onLoginWithGoogle = onOpenGoogleAuth,
             onToggleServer = { enable ->
                 viewModel.toggleOAuthServer(enable)
             },

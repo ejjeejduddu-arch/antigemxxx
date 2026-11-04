@@ -198,6 +198,14 @@ class MainActivity : ComponentActivity() {
 
             val showFullScreenInstaller = !isInstalledState && !hasSkippedInstaller
 
+            val userEmail by chatViewModel.userEmail.collectAsState()
+            val agyAuthInfo by chatViewModel.agyAuthInfo.collectAsState()
+            var hasSkippedAuth by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
+            var showAuthScreenExplicitly by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
+
+            val isAuthenticated = !userEmail.isNullOrBlank() || agyAuthInfo?.isLoggedIn == true
+            val showGoogleAuthScreen = (!isAuthenticated && !hasSkippedAuth) || showAuthScreenExplicitly
+
             GeminiTheme(darkTheme = useDarkTheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -209,6 +217,25 @@ class MainActivity : ComponentActivity() {
                                 showPermissionsDialog = false
                                 com.example.gemini.data.service.TermuxService.start(context)
                                 com.example.gemini.data.local.LocalServerManager.autoStartOnAppLaunch(context)
+                            }
+                        )
+                    } else if (showGoogleAuthScreen) {
+                        BackHandler {
+                            if (showAuthScreenExplicitly) {
+                                showAuthScreenExplicitly = false
+                            } else {
+                                hasSkippedAuth = true
+                            }
+                        }
+                        com.example.gemini.ui.auth.GoogleAuthScreen(
+                            viewModel = chatViewModel,
+                            onAuthSuccess = {
+                                showAuthScreenExplicitly = false
+                                hasSkippedAuth = false
+                            },
+                            onSkipOrDismiss = {
+                                showAuthScreenExplicitly = false
+                                hasSkippedAuth = true
                             }
                         )
                     } else if (showFullScreenInstaller) {
@@ -286,6 +313,9 @@ class MainActivity : ComponentActivity() {
                                         onNavigateToBrowser = {
                                             previousViewMode = currentViewMode
                                             currentViewMode = AppViewMode.BROWSER
+                                        },
+                                        onOpenGoogleAuth = {
+                                            showAuthScreenExplicitly = true
                                         }
                                     )
                                 }

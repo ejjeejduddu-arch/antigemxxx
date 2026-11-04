@@ -81,6 +81,11 @@
       <td>Extensible JSON-RPC bridge allowing autonomous tools to inspect DOM trees, capture viewport frames, and manage device assets.</td>
     </tr>
     <tr>
+      <td><b>Authentication Engine</b></td>
+      <td>Google OAuth 2.0 PKCE & Local Callback</td>
+      <td>Direct authorization code exchange with local callback verification on port 51121, Material 3 startup screen, and offline workspace fallback.</td>
+    </tr>
+    <tr>
       <td><b>Mathematical Canvas</b></td>
       <td>JLaTeXMath Native Engine</td>
       <td>Hardware-accelerated mathematical typography and KaTeX formula rendering directly on Android Canvas with zero WebView overhead.</td>
@@ -196,7 +201,7 @@ AntiGem integrates directly with the Google Antigravity language server via high
 ### Direct APK Installation
 Download the official release APK built directly via GitHub Actions:
 
-- **Download Link**: [antiGem-termux-v1.0.20-release.apk](https://github.com/ejjeejduddu-arch/antigemxxx/releases/download/v1.0.20/antiGem-termux-v1.0.20-release.apk)
+- **Download Link**: [antiGem-termux-v1.0.21-release.apk](https://github.com/ejjeejduddu-arch/antigemxxx/releases/download/v1.0.21/antiGem-termux-v1.0.21-release.apk)
 - **Minimum Android Version**: Android 8.0 (API Level 26)
 - **Target Android Version**: Android 14+ (API Level 34/36)
 - **Supported Architectures**: `arm64-v8a`, `armeabi-v7a`, `x86_64`, `x86`
@@ -216,8 +221,8 @@ chmod +x gradlew scripts/build_all_apks.sh
 ```
 
 Generated APKs will be placed in the `output/` directory:
-- `output/antiGem-termux-v1.0.20-release.apk`
-- `output/antiGem-standard-v1.0.20-release.apk`
+- `output/antiGem-termux-v1.0.21-release.apk`
+- `output/antiGem-standard-v1.0.21-release.apk`
 
 ---
 
