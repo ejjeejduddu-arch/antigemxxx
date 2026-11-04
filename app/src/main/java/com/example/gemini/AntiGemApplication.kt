@@ -31,7 +31,7 @@ class AntiGemApplication : Application() {
             this,
             TelemetryDeck.Builder()
                 .appID("D98008E6-EEE4-4BBC-97A2-E3790251AECF")
-                .namespace("com.santoshkurmi")
+                .namespace("com.antigem")
                 .defaultUser(SimpleTelemetryId.getUniqueUserId(this))
                 .testMode(BuildConfig.DEBUG)
                 .showDebugLogs(BuildConfig.DEBUG)
