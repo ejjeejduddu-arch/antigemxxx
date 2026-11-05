@@ -307,17 +307,8 @@ object LocalServerManager {
             )
             return
         }
-        if (!LocalEnvironmentManager.isInstalled(context)) {
-            Log.d(TAG, "[ServerManager] Bootstrap not installed yet, deferring auto-start until installation completes")
-            return
-        }
-        if (!hasServerScript(context)) {
-            Log.d(TAG, "[ServerManager] No server executable found in home directory, skipping autoStartOnAppLaunch")
-            return
-        }
-        if (!com.example.gemini.data.agent.AgentPreferences.hasChosenSync(context)) {
-            // the server starts with the agent flags: wait for the first-launch agent choice
-            Log.d(TAG, "[ServerManager] Agents not chosen yet, deferring auto-start until the choice is made")
+        if (!hasServerScript(context) && !LocalEnvironmentManager.isInstalled(context)) {
+            Log.d(TAG, "[ServerManager] No server executable found, skipping autoStartOnAppLaunch")
             return
         }
         hasInitialAutoStarted = true
@@ -343,16 +334,20 @@ object LocalServerManager {
             return
         }
 
-        if (!LocalEnvironmentManager.isInstalled(context)) {
-            Log.d(TAG, "[ServerManager] Bootstrap not installed, skipping server start")
+        if (!hasServerScript(context) && !LocalEnvironmentManager.isInstalled(context)) {
+            Log.d(TAG, "[ServerManager] Neither bootstrap nor server binary available, skipping server start")
             return
         }
 
         val appContext = context.applicationContext
         ensureBridgeBinary(appContext)
         // the bridge starts Claude Code through the app's launcher (--claude-bin)
-        LocalEnvironmentManager.ensureGlibcEnvironment(appContext)
-        LocalEnvironmentManager.ensureClaudeWrapper(appContext)
+        try {
+            LocalEnvironmentManager.ensureGlibcEnvironment(appContext)
+            LocalEnvironmentManager.ensureClaudeWrapper(appContext)
+        } catch (e: Exception) {
+            Log.w(TAG, "[ServerManager] Optional glibc/claude environment setup skipped: ${e.message}")
+        }
 
         val command = resolveServerCommand(appContext)
         if (command == null) {

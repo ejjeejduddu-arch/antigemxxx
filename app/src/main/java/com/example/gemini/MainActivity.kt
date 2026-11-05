@@ -65,8 +65,8 @@ class MainActivity : ComponentActivity() {
 
         if (com.example.gemini.ui.components.PermissionUtils.hasNotificationPermission(this)) {
             com.example.gemini.data.service.TermuxService.start(this)
-            com.example.gemini.data.local.LocalServerManager.autoStartOnAppLaunch(this)
         }
+        com.example.gemini.data.local.LocalServerManager.autoStartOnAppLaunch(this)
         com.example.gemini.data.daemon.TermuxDaemonManager.init(this)
         com.example.gemini.ui.browser.BrowserSessionManager.instance.init(this)
         com.example.gemini.data.local.LocalTerminalBridge.instance.init(this)
@@ -198,14 +198,6 @@ class MainActivity : ComponentActivity() {
 
             val showFullScreenInstaller = !isInstalledState && !hasSkippedInstaller
 
-            val userEmail by chatViewModel.userEmail.collectAsState()
-            val agyAuthInfo by chatViewModel.agyAuthInfo.collectAsState()
-            var hasSkippedAuth by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
-            var showAuthScreenExplicitly by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
-
-            val isAuthenticated = !userEmail.isNullOrBlank() || agyAuthInfo?.isLoggedIn == true
-            val showGoogleAuthScreen = (!isAuthenticated && !hasSkippedAuth) || showAuthScreenExplicitly
-
             GeminiTheme(darkTheme = useDarkTheme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -219,25 +211,6 @@ class MainActivity : ComponentActivity() {
                                 com.example.gemini.data.local.LocalServerManager.autoStartOnAppLaunch(context)
                             }
                         )
-                    } else if (showGoogleAuthScreen) {
-                        BackHandler {
-                            if (showAuthScreenExplicitly) {
-                                showAuthScreenExplicitly = false
-                            } else {
-                                hasSkippedAuth = true
-                            }
-                        }
-                        com.example.gemini.ui.auth.GoogleAuthScreen(
-                            viewModel = chatViewModel,
-                            onAuthSuccess = {
-                                showAuthScreenExplicitly = false
-                                hasSkippedAuth = false
-                            },
-                            onSkipOrDismiss = {
-                                showAuthScreenExplicitly = false
-                                hasSkippedAuth = true
-                            }
-                        )
                     } else if (showFullScreenInstaller) {
                         BackHandler {
                             hasSkippedInstaller = true
@@ -248,10 +221,7 @@ class MainActivity : ComponentActivity() {
                             onComplete = {
                                 isInstalledState = true
                                 hasSkippedInstaller = true
-                                // before the first agent choice the server waits (the choice dialog starts it)
-                                if (com.example.gemini.data.local.LocalServerManager.hasServerScript(context) &&
-                                    com.example.gemini.data.agent.AgentPreferences.hasChosenSync(context)
-                                ) {
+                                if (com.example.gemini.data.local.LocalServerManager.hasServerScript(context)) {
                                     com.example.gemini.data.local.LocalServerManager.startServer(
                                         context,
                                         forceRestart = false
@@ -313,9 +283,6 @@ class MainActivity : ComponentActivity() {
                                         onNavigateToBrowser = {
                                             previousViewMode = currentViewMode
                                             currentViewMode = AppViewMode.BROWSER
-                                        },
-                                        onOpenGoogleAuth = {
-                                            showAuthScreenExplicitly = true
                                         }
                                     )
                                 }

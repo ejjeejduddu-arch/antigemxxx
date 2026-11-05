@@ -3,6 +3,7 @@ package com.example.gemini.ui.components
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -534,7 +535,8 @@ fun NewChatCheckingAuthPromptCard(
  */
 @Composable
 fun ServerStoppedPromptCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onStartClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -547,12 +549,13 @@ fun ServerStoppedPromptCard(
             modifier = Modifier
                 .size(60.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)),
+                .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
+                .clickable(onClick = onStartClick),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = Icons.Outlined.PowerSettingsNew,
-                contentDescription = null,
+                contentDescription = "Start Server",
                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
                 modifier = Modifier.size(28.dp)
             )
@@ -571,12 +574,27 @@ fun ServerStoppedPromptCard(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "The local AI engine is currently stopped. Tap the status dot in the top header to start, restart, or stop the server and inspect live logs.",
+            text = "The local AI engine is currently stopped. Tap the button below or the status dot in the top header to start the server.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
             textAlign = TextAlign.Center,
             lineHeight = 20.sp
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = onStartClick,
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.PowerSettingsNew,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Start Server")
+        }
     }
 }
 

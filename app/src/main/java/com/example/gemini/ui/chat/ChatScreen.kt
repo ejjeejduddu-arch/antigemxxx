@@ -131,8 +131,7 @@ fun ChatScreen(
     onMinimizeWindow: () -> Unit = {},
     onNavigateToIde: () -> Unit = {},
     onNavigateToTerminal: () -> Unit = {},
-    onNavigateToBrowser: () -> Unit = {},
-    onOpenGoogleAuth: () -> Unit = {}
+    onNavigateToBrowser: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -374,7 +373,7 @@ fun ChatScreen(
             isAuthBusy = isAuthBusy,
             inStartupGrace = isInitialGracePeriod,
             serverRestarting = serverRestarting,
-            onSignIn = onOpenGoogleAuth,
+            onSignIn = { viewModel.loginToAgyHub(force = true) },
             onCheckAuth = { viewModel.checkAgyAuthStatus(userInitiated = true) },
             onRetry = {
                 com.example.gemini.ui.components.AppToastHelper.showToast("Reconnecting to Antigravity…", com.example.gemini.ui.components.ChatToastType.INFO)
@@ -981,7 +980,9 @@ fun ChatScreen(
                 },
                 authInfo = agyAuthInfo,
                 isAuthBusy = isAuthBusy,
-                onLogin = onOpenGoogleAuth,
+                onLogin = {
+                    viewModel.loginToAgyHub(force = true)
+                },
                 onLogout = {
                     viewModel.logoutFromAgyHub()
                 },
@@ -1317,7 +1318,9 @@ fun ChatScreen(
                                         statusColors = agentEntries.associate { it.agent to it.color }
                                     )
                                 }
-                                com.example.gemini.ui.components.ServerStoppedPromptCard()
+                                com.example.gemini.ui.components.ServerStoppedPromptCard(
+                                    onStartClick = restartLocalServer
+                                )
                             }
                         }
                     } else if (!isClaudeChat && isServerInitializing && messages.isEmpty()) {
@@ -1424,7 +1427,7 @@ fun ChatScreen(
                                     com.example.gemini.data.remote.SystemStatus.UNAUTHENTICATED -> {
                                         if (isNetworkConnected) {
                                             com.example.gemini.ui.components.NewChatSignInPromptCard(
-                                                onSignInClick = onOpenGoogleAuth
+                                                onSignInClick = { viewModel.loginToAgyHub(force = true) }
                                             )
                                         }
                                     }
@@ -2160,7 +2163,11 @@ fun ChatScreen(
             terminalTheme = terminalTheme,
             isLocalToolsEnabled = isLocalToolsEnabled,
             isLocalToolsInstalled = isLocalToolsInstalled,
-            onLoginWithGoogle = onOpenGoogleAuth,
+            onLoginWithGoogle = {
+                val url = viewModel.getGoogleOAuthUrl()
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                context.startActivity(intent)
+            },
             onToggleServer = { enable ->
                 viewModel.toggleOAuthServer(enable)
             },
