@@ -245,12 +245,19 @@ func main() {
 	framedHeader := security.BuildFramedHeader(secToken)
 
 	resolvedAgyBin, err := hub.ResolveAgyBinaryInteractive(customAgyBin, forceStart || skipHub)
-	if customAgyBin != "" && err != nil {
-		fmt.Printf(" \033[1;31m✗ Fatal Error:\033[0m %v\n", err)
-		os.Exit(1)
-	}
 	if err != nil && !skipHub {
-		fmt.Printf(" \033[31m[!] AGY Discovery Warning:\033[0m %v\n", err)
+		if customAgyBin != "" {
+			fmt.Printf(" \033[33m[!] Specified AGY binary not found at '%s'. Trying auto-discovery...\033[0m\n", customAgyBin)
+			if fallbackBin, fallbackErr := hub.ResolveAgyBinaryInteractive("", true); fallbackErr == nil {
+				resolvedAgyBin = fallbackBin
+				err = nil
+				fmt.Printf(" \033[32m[+] Fallback AGY Binary Found:\033[0m %s\n", resolvedAgyBin)
+			} else {
+				fmt.Printf(" \033[33m[!] AGY binary not found (%v). Running IDE server in standalone mode.\033[0m\n", fallbackErr)
+			}
+		} else {
+			fmt.Printf(" \033[31m[!] AGY Discovery Warning:\033[0m %v\n", err)
+		}
 	}
 
 	// Stylized Banner
@@ -572,7 +579,9 @@ func main() {
 	}
 
 	if shouldStartHub {
-		if err := hubMgr.Start(); err != nil {
+		if resolvedAgyBin == "" {
+			fmt.Println(" \033[33m[!] AGY Hub auto-start deferred: AGY binary not found on device. IDE server is active.\033[0m")
+		} else if err := hubMgr.Start(); err != nil {
 			fmt.Printf(" \033[31m[!] Warning starting AGY Hub:\033[0m %v\n", err)
 		}
 	}

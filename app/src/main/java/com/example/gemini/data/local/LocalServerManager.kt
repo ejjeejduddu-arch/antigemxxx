@@ -70,12 +70,18 @@ object LocalServerManager {
             }
             tempFile.setExecutable(true, false)
             tempFile.setReadable(true, false)
+            try {
+                android.system.Os.chmod(tempFile.absolutePath, 493)
+            } catch (_: Exception) {}
             if (targetFile.exists()) {
                 targetFile.delete()
             }
             tempFile.renameTo(targetFile)
             targetFile.setExecutable(true, false)
             targetFile.setReadable(true, false)
+            try {
+                android.system.Os.chmod(targetFile.absolutePath, 493)
+            } catch (_: Exception) {}
         }
     }
 
@@ -197,9 +203,28 @@ object LocalServerManager {
 
     private fun resolveServerCommand(context: Context): String? {
         val authPrefs = AuthPreferences(context)
-        val bridgeCmd =
+        val binBridge = File(LocalEnvironmentManager.getBinDir(context), "agy_ide_bridge")
+        if (binBridge.exists()) {
+            try {
+                binBridge.setExecutable(true, false)
+                binBridge.setReadable(true, false)
+                android.system.Os.chmod(binBridge.absolutePath, 493)
+            } catch (_: Exception) {}
+        }
+        val bridgeCmd = if (binBridge.exists()) {
+            binBridge.absolutePath
+        } else {
             authPrefs.getAgyBridgeBinaryPathSync().trim().ifBlank { AuthPreferences.DEFAULT_BRIDGE_BINARY_PATH }
-        val agyCmd = authPrefs.getAgyBinaryPathSync().trim().ifBlank { AuthPreferences.DEFAULT_AGY_BINARY_PATH }
+        }
+
+        val rawAgyCmd = authPrefs.getAgyBinaryPathSync().trim()
+        val agyCmd = rawAgyCmd.ifBlank { AuthPreferences.DEFAULT_AGY_BINARY_PATH }
+        val home = LocalEnvironmentManager.getHomeDir(context)
+        val agyFile = if (agyCmd.startsWith("~/")) {
+            File(home, agyCmd.removePrefix("~/"))
+        } else {
+            File(agyCmd)
+        }
 
         val token = authPrefs.getSecurityTokenSync()
         val bridgePort = try {
@@ -214,7 +239,7 @@ object LocalServerManager {
         }
         val tzOffset = java.util.TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 1000
 
-        val binParam = if (agyCmd.isNotBlank()) {
+        val binParam = if (agyCmd.isNotBlank() && agyFile.exists()) {
             " --bin \"$agyCmd\""
         } else {
             ""
@@ -359,6 +384,7 @@ object LocalServerManager {
                 context = appContext,
                 isSsh = false,
                 initialCommand = command,
+                execShellAfterCommand = false,
                 initialCols = 80,
                 initialRows = 24
             )

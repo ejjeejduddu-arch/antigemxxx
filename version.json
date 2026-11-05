@@ -1,12 +1,13 @@
 {
-  "version_code": 123,
-  "version_name": "1.0.23",
+  "version_code": 124,
+  "version_name": "1.0.24",
   "min_supported_version_code": 1,
   "changelog": [
-    "Fix dynamic linker library linkage (libandroid-support.so) for com.antigravity.ai runtime",
-    "Configure LD_LIBRARY_PATH and LD_PRELOAD in executeCommand, TerminalSession, and script execution",
-    "Silence unofficial build analytics warning toast on launch",
-    "Fix rootfs extraction verification failure and engine auto-start"
+    "Prevent agy_ide_bridge exit on startup when agy binary is not yet installed",
+    "Auto-discover AGY CLI in standard locations and run IDE server in standalone mode",
+    "Fix mutex deadlock on HubManager start error paths",
+    "Ensure chmod 0755 executable permissions on all extracted binary assets in bin directory",
+    "Fix local engine stopped error and resolve chat drawer unreachable state"
   ],
   "is_critical": false
 }

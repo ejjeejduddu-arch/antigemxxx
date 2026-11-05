@@ -201,7 +201,7 @@ AntiGem integrates directly with the Google Antigravity language server via high
 ### Direct APK Installation
 Download the official release APK built directly via GitHub Actions:
 
-- **Download Link**: [antiGem-termux-v1.0.23-release.apk](https://github.com/ejjeejduddu-arch/antigemxxx/releases/download/v1.0.23/antiGem-termux-v1.0.23-release.apk)
+- **Download Link**: [antiGem-termux-v1.0.24-release.apk](https://github.com/ejjeejduddu-arch/antigemxxx/releases/download/v1.0.24/antiGem-termux-v1.0.24-release.apk)
 - **Minimum Android Version**: Android 8.0 (API Level 26)
 - **Target Android Version**: Android 14+ (API Level 34/36)
 - **Supported Architectures**: `arm64-v8a`, `armeabi-v7a`, `x86_64`, `x86`
@@ -221,8 +221,8 @@ chmod +x gradlew scripts/build_all_apks.sh
 ```
 
 Generated APKs will be placed in the `output/` directory:
-- `output/antiGem-termux-v1.0.23-release.apk` (Application ID: `com.antigravity.ai`)
-- `output/antigravity-ai-v1.0.23-release.apk` (Application ID: `com.antigravity.ai`)
+- `output/antiGem-termux-v1.0.24-release.apk` (Application ID: `com.antigravity.ai`)
+- `output/antigravity-ai-v1.0.24-release.apk` (Application ID: `com.antigravity.ai`)
 
 ---
 

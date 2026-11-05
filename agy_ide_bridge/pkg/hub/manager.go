@@ -401,8 +401,17 @@ func (m *HubManager) Start() error {
 	m.setStatusLocked(HubStatusStarting, "")
 
 	if m.AgyBinPath == "" {
+		if autoBin := ResolveAgyBinary(); autoBin != "" && autoBin != "agy" {
+			m.AgyBinPath = autoBin
+		} else if customBin, err := ResolveAgyBinaryInteractive("", true); err == nil && customBin != "" {
+			m.AgyBinPath = customBin
+		}
+	}
+
+	if m.AgyBinPath == "" {
 		err := fmt.Errorf("AGY executable binary not specified or found")
 		m.setStatusLocked(HubStatusError, err.Error())
+		m.mu.Unlock()
 		return err
 	}
 
@@ -412,6 +421,7 @@ func (m *HubManager) Start() error {
 		if patchTarget == "" {
 			err := fmt.Errorf("AGY executable binary not found for security header patching")
 			m.setStatusLocked(HubStatusError, err.Error())
+			m.mu.Unlock()
 			return err
 		}
 		patchedHeader, elapsed, err := security.PatchAgyHeader(patchTarget, m.SecurityToken)
@@ -419,6 +429,7 @@ func (m *HubManager) Start() error {
 			errMsg := fmt.Sprintf("Security Error: Failed to patch AGY binary (%s): %v", patchTarget, err)
 			log.Printf("\033[1;31m[Security Fatal]\033[0m %s", errMsg)
 			m.setStatusLocked(HubStatusError, errMsg)
+			m.mu.Unlock()
 			return errors.New(errMsg)
 		}
 		log.Printf("\033[1;32m[Security]\033[0m In-place patched AGY binary (%s) in %v -> Active Header: %s", patchTarget, elapsed, patchedHeader)
