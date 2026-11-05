@@ -202,6 +202,14 @@ class AgyPluginService(
                         if (!envMap.containsKey("LD_PRELOAD") && termuxExec != null) {
                             envMap["LD_PRELOAD"] = termuxExec
                         }
+                        if (!envMap.containsKey("LD_LIBRARY_PATH")) {
+                            val pkgLib = when {
+                                java.io.File("/data/data/com.antigravity.ai/files/usr/lib").exists() -> "/data/data/com.antigravity.ai/files/usr/lib"
+                                java.io.File("/data/data/com.termux/files/usr/lib").exists() -> "/data/data/com.termux/files/usr/lib"
+                                else -> "/data/data/com.antigravity.ai/files/usr/lib"
+                            }
+                            envMap["LD_LIBRARY_PATH"] = pkgLib
+                        }
                         if (!envMap.containsKey("PATH")) {
                             val pkgPrefix = when {
                                 java.io.File("/data/data/com.antigravity.ai/files/usr/bin").exists() -> "/data/data/com.antigravity.ai/files"

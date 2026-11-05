@@ -20,11 +20,7 @@ class AntiGemApplication : Application() {
         AdbConnectManager.init(this)
         // Forks build with their own key, so only official release APKs report real usage.
         if (!BuildConfig.DEBUG && !isOfficialRelease()) {
-            Toast.makeText(
-                this,
-                "Unofficial build: analytics disabled. Developer: set your own TelemetryDeck app ID and RELEASE_CERT_SHA256 in AntiGemApplication.kt.",
-                Toast.LENGTH_LONG
-            ).show()
+            android.util.Log.d("AntiGemApplication", "Analytics disabled for custom build.")
             return
         }
         TelemetryDeck.start(

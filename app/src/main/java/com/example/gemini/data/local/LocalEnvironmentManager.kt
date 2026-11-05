@@ -2155,6 +2155,13 @@ export PREFIX="${prefixDir.absolutePath}"
 export HOME="${homeDir.absolutePath}"
 export PATH="${homeDir.absolutePath}/.local/bin:${binDir.absolutePath}:${binDir.absolutePath}/applets:/system/bin:/system/xbin"
 export TMPDIR="${prefixDir.absolutePath}/tmp"
+export LD_LIBRARY_PATH="${prefixDir.absolutePath}/lib${'$'}{LD_LIBRARY_PATH:+:${'$'}LD_LIBRARY_PATH}"
+if [ -f "${prefixDir.absolutePath}/lib/libtermux-exec.so" ]; then
+    export LD_PRELOAD="${prefixDir.absolutePath}/lib/libtermux-exec.so"
+fi
+export TERMUX__PREFIX="${prefixDir.absolutePath}"
+export TERMUX_APP__DATA_DIR="${context.filesDir.parentFile?.absolutePath ?: "/data/data/${context.packageName}"}"
+export TERMUX_APP__LEGACY_DATA_DIR="/data/data/com.termux"
 export TERM="xterm-256color"
 export COLORTERM="truecolor"
 export TERMUX_VERSION="0.118.0"
@@ -2197,6 +2204,13 @@ fi
 export HOME="${homeDir.absolutePath}"
 export PATH="${homeDir.absolutePath}/.local/bin:${binDir.absolutePath}:${binDir.absolutePath}/applets:/system/bin:/system/xbin"
 export TMPDIR="${prefixDir.absolutePath}/tmp"
+export LD_LIBRARY_PATH="${prefixDir.absolutePath}/lib${'$'}{LD_LIBRARY_PATH:+:${'$'}LD_LIBRARY_PATH}"
+if [ -f "${prefixDir.absolutePath}/lib/libtermux-exec.so" ]; then
+    export LD_PRELOAD="${prefixDir.absolutePath}/lib/libtermux-exec.so"
+fi
+export TERMUX__PREFIX="${prefixDir.absolutePath}"
+export TERMUX_APP__DATA_DIR="${context.filesDir.parentFile?.absolutePath ?: "/data/data/${context.packageName}"}"
+export TERMUX_APP__LEGACY_DATA_DIR="/data/data/com.termux"
 export TERM="xterm-256color"
 export COLORTERM="truecolor"
 export TERMUX_VERSION="0.118.0"
@@ -2209,6 +2223,28 @@ export LC_ALL="en_US.UTF-8"
 """.trimIndent()
             )
             try { Os.chmod(etcProfile.absolutePath, 420) } catch (_: Exception) {} // 0644
+        }
+
+        val etcBashrc = File(etcDir, "bash.bashrc")
+        if (etcBashrc.exists()) {
+            try {
+                val content = etcBashrc.readText()
+                if (!content.contains("LD_LIBRARY_PATH")) {
+                    etcBashrc.appendText(
+                        """
+                        |
+                        |export PREFIX="${prefixDir.absolutePath}"
+                        |export LD_LIBRARY_PATH="${prefixDir.absolutePath}/lib${'$'}{LD_LIBRARY_PATH:+:${'$'}LD_LIBRARY_PATH}"
+                        |if [ -f "${prefixDir.absolutePath}/lib/libtermux-exec.so" ]; then
+                        |    export LD_PRELOAD="${prefixDir.absolutePath}/lib/libtermux-exec.so"
+                        |fi
+                        |export TERMUX__PREFIX="${prefixDir.absolutePath}"
+                        |export TERMUX_APP__DATA_DIR="${context.filesDir.parentFile?.absolutePath ?: "/data/data/${context.packageName}"}"
+                        |export TERMUX_APP__LEGACY_DATA_DIR="/data/data/com.termux"
+                        |""".trimMargin()
+                    )
+                }
+            } catch (_: Exception) {}
         }
 
         // Ensure standard DNS resolution files exist in $PREFIX/etc if missing
@@ -2288,9 +2324,18 @@ All files created here persist inside the application.
             }
             try {
                 val pb = ProcessBuilder(sshKeygen.absolutePath, "-A")
+                val libDir = File(prefixDir, "lib")
+                val termuxExec = File(libDir, "libtermux-exec.so")
                 pb.environment()["PREFIX"] = prefixDir.absolutePath
                 pb.environment()["HOME"] = homeDir.absolutePath
                 pb.environment()["PATH"] = "${binDir.absolutePath}:/system/bin"
+                pb.environment()["LD_LIBRARY_PATH"] = "${libDir.absolutePath}:/data/data/${context.packageName}/files/usr/lib:/data/user/0/${context.packageName}/files/usr/lib"
+                if (termuxExec.exists()) {
+                    pb.environment()["LD_PRELOAD"] = termuxExec.absolutePath
+                }
+                pb.environment()["TERMUX__PREFIX"] = prefixDir.absolutePath
+                pb.environment()["TERMUX_APP__DATA_DIR"] = context.filesDir.parentFile?.absolutePath ?: "/data/data/${context.packageName}"
+                pb.environment()["TERMUX_APP__LEGACY_DATA_DIR"] = "/data/data/com.termux"
                 val process = pb.start()
                 process.waitFor(5, java.util.concurrent.TimeUnit.SECONDS)
                 log("Generated fresh OpenSSH host keys via ssh-keygen -A")
@@ -2432,11 +2477,19 @@ All files created here persist inside the application.
             val lib = getLibDir(context)
             val home = getHomeDir(context)
             val tmp = getTmpDir(context)
+            val termuxExec = File(lib, "libtermux-exec.so")
 
             env["PREFIX"] = prefix.absolutePath
             env["HOME"] = home.absolutePath
             env["PATH"] = "${home.absolutePath}/.local/bin:${bin.absolutePath}:${bin.absolutePath}/applets:/system/bin:/system/xbin"
             env["TMPDIR"] = tmp.absolutePath
+            env["LD_LIBRARY_PATH"] = "${lib.absolutePath}:/data/data/${context.packageName}/files/usr/lib:/data/user/0/${context.packageName}/files/usr/lib"
+            if (termuxExec.exists()) {
+                env["LD_PRELOAD"] = termuxExec.absolutePath
+            }
+            env["TERMUX__PREFIX"] = prefix.absolutePath
+            env["TERMUX_APP__DATA_DIR"] = context.filesDir.parentFile?.absolutePath ?: "/data/data/${context.packageName}"
+            env["TERMUX_APP__LEGACY_DATA_DIR"] = "/data/data/com.termux"
             env["TERM"] = "xterm-256color"
             env["COLORTERM"] = "truecolor"
             env["TERMUX_VERSION"] = "0.118.0"
@@ -2620,10 +2673,19 @@ All files created here persist inside the application.
         val pb = ProcessBuilder(cmdList)
         pb.directory(homeDir)
         val env = pb.environment()
+        val libDir = getLibDir(context)
+        val termuxExec = File(libDir, "libtermux-exec.so")
         env["PREFIX"] = prefixDir.absolutePath
         env["HOME"] = homeDir.absolutePath
         env["TMPDIR"] = tmpDir.absolutePath
         env["PATH"] = "${homeDir.absolutePath}/.local/bin:${binDir.absolutePath}:${prefixDir.absolutePath}/bin:/system/bin:/system/xbin"
+        env["LD_LIBRARY_PATH"] = "${libDir.absolutePath}:/data/data/${context.packageName}/files/usr/lib:/data/user/0/${context.packageName}/files/usr/lib"
+        if (termuxExec.exists()) {
+            env["LD_PRELOAD"] = termuxExec.absolutePath
+        }
+        env["TERMUX__PREFIX"] = prefixDir.absolutePath
+        env["TERMUX_APP__DATA_DIR"] = context.filesDir.parentFile?.absolutePath ?: "/data/data/${context.packageName}"
+        env["TERMUX_APP__LEGACY_DATA_DIR"] = "/data/data/com.termux"
         env["TERM"] = "xterm-256color"
         env["COLORTERM"] = "truecolor"
         env["LANG"] = "en_US.UTF-8"

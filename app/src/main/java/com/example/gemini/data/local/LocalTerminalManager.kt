@@ -306,6 +306,14 @@ class LocalPtySession(
                 envMap["HOME"] = home.absolutePath
                 envMap["PATH"] = "${home.absolutePath}/.local/bin:${bin.absolutePath}:${bin.absolutePath}/applets:/system/bin:/system/xbin"
                 envMap["TMPDIR"] = tmp.absolutePath
+                envMap["LD_LIBRARY_PATH"] = "${lib.absolutePath}:/data/data/${context.packageName}/files/usr/lib:/data/user/0/${context.packageName}/files/usr/lib"
+                val termuxExec = File(lib, "libtermux-exec.so")
+                if (termuxExec.exists()) {
+                    envMap["LD_PRELOAD"] = termuxExec.absolutePath
+                }
+                envMap["TERMUX__PREFIX"] = prefix.absolutePath
+                envMap["TERMUX_APP__DATA_DIR"] = context.filesDir.parentFile?.absolutePath ?: "/data/data/${context.packageName}"
+                envMap["TERMUX_APP__LEGACY_DATA_DIR"] = "/data/data/com.termux"
                 envMap["TERM"] = "xterm-256color"
                 envMap["COLORTERM"] = "truecolor"
                 envMap["TERMUX_VERSION"] = "0.118.0"
