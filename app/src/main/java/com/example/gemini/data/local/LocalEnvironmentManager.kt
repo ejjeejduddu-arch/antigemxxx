@@ -172,7 +172,8 @@ object LocalEnvironmentManager {
     fun getHomeDir(context: Context): File = File(context.filesDir, "home")
     fun getProjectsDir(context: Context): File = File(getHomeDir(context), "projects")
     fun getUbuntuRootDir(context: Context): File = File(context.filesDir, "ubuntu")
-    fun isTermuxPackage(context: Context): Boolean = context.packageName == "com.termux"
+    fun isTermuxPackage(context: Context): Boolean =
+        context.packageName == "com.antigravity.ai" || context.packageName == "com.termux"
 
     fun ensureProotExtracted(context: Context): String {
         val binDir = File(context.filesDir, "bin")
@@ -579,11 +580,15 @@ object LocalEnvironmentManager {
 
     fun ensureTermuxApiDispatcher(context: Context) {
         try {
-            val libexecDir = File(getPrefixDir(context), "libexec")
+            val prefix = getPrefixDir(context).absolutePath
+            val libexecDir = File(prefix, "libexec")
             if (!libexecDir.exists()) libexecDir.mkdirs()
             val dispatcherFile = File(libexecDir, "termux-api")
+            val pkg = context.packageName
+            val bashPath = File(prefix, "bin/bash").absolutePath
+            val tmpDir = File(prefix, "tmp").absolutePath
             val scriptContent = """
-                #!/data/data/com.termux/files/usr/bin/bash
+                #!$bashPath
                 METHOD="${'$'}1"
                 shift
 
@@ -595,13 +600,13 @@ object LocalEnvironmentManager {
                     fi
                 fi
 
-                TMP_DIR="${'$'}{TMPDIR:-/data/data/com.termux/files/usr/tmp}"
+                TMP_DIR="${'$'}{TMPDIR:-$tmpDir}"
                 mkdir -p "${'$'}TMP_DIR"
                 TMP_OUT="${'$'}TMP_DIR/api_out.${'$'}${'$'}"
 
                 am broadcast --user 0 \
                     -a "com.termux.api" \
-                    -n "com.termux/com.example.gemini.data.receiver.TermuxApiReceiver" \
+                    -n "$pkg/com.example.gemini.data.receiver.TermuxApiReceiver" \
                     --es "api_method" "${'$'}METHOD" \
                     --es "socket_output" "${'$'}TMP_OUT" \
                     "${'$'}{EXTRA_ARGS[@]}" \
@@ -2594,7 +2599,7 @@ All files created here persist inside the application.
         }
 
         if (!scriptFile.exists()) {
-            val msg = "❌ Error: Script '$scriptName' not found at ${scriptFile.absolutePath}!"
+            val msg = "Error: Script '$scriptName' not found at ${scriptFile.absolutePath}!"
             withContext(Dispatchers.Main) { onLogLine(msg) }
             return@withContext LocalCommandResult(1, msg, System.currentTimeMillis() - startTime)
         }
@@ -2604,6 +2609,7 @@ All files created here persist inside the application.
             File(binDir, "bash").exists() -> File(binDir, "bash").absolutePath
             File(prefixDir, "bin/bash").exists() -> File(prefixDir, "bin/bash").absolutePath
             File(binDir, "sh").exists() -> File(binDir, "sh").absolutePath
+            File("/data/data/com.antigravity.ai/files/usr/bin/bash").exists() -> "/data/data/com.antigravity.ai/files/usr/bin/bash"
             File("/data/data/com.termux/files/usr/bin/bash").exists() -> "/data/data/com.termux/files/usr/bin/bash"
             else -> "sh"
         }

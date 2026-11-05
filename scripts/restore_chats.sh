@@ -3,6 +3,8 @@
 if [ -z "${BASH_VERSION:-}" ]; then
     if [ -n "${PREFIX:-}" ] && [ -x "$PREFIX/bin/bash" ]; then
         exec "$PREFIX/bin/bash" "$0" "$@"
+    elif [ -x "/data/data/com.antigravity.ai/files/usr/bin/bash" ]; then
+        exec "/data/data/com.antigravity.ai/files/usr/bin/bash" "$0" "$@"
     elif [ -x "/data/data/com.termux/files/usr/bin/bash" ]; then
         exec "/data/data/com.termux/files/usr/bin/bash" "$0" "$@"
     elif command -v bash >/dev/null 2>&1; then
@@ -18,7 +20,10 @@ set -euo pipefail
 INPUT_ZIP="${1:-}"
 PASSWORD="${2:-}"
 TIMESTAMP="$(date +"%Y-%m-%d-%H-%M-%S")"
-HOME_DIR="${HOME:-/data/data/com.termux/files/home}"
+HOME_DIR="${HOME:-/data/data/com.antigravity.ai/files/home}"
+if [ ! -d "$HOME_DIR" ] && [ -d "/data/data/com.termux/files/home" ]; then
+    HOME_DIR="/data/data/com.termux/files/home"
+fi
 GEMINI_DIR="${HOME_DIR}/.gemini"
 GEMINI_BAK="${HOME_DIR}/.gemini.bak.${TIMESTAMP}"
 

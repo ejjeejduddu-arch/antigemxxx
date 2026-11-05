@@ -1761,9 +1761,19 @@ func (h *Handler) McpConfigHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func injectTermuxEnvIfNeeded(rawContent string) string {
-	libTermuxExec := "/data/data/com.termux/files/usr/lib/libtermux-exec.so"
+	libTermuxExec := "/data/data/com.antigravity.ai/files/usr/lib/libtermux-exec.so"
 	if _, err := os.Stat(libTermuxExec); err != nil {
-		return rawContent
+		libTermuxExec = "/data/data/com.termux/files/usr/lib/libtermux-exec.so"
+		if _, err := os.Stat(libTermuxExec); err != nil {
+			if prefix := os.Getenv("PREFIX"); prefix != "" {
+				libTermuxExec = filepath.Join(prefix, "lib", "libtermux-exec.so")
+				if _, err := os.Stat(libTermuxExec); err != nil {
+					return rawContent
+				}
+			} else {
+				return rawContent
+			}
+		}
 	}
 	var root map[string]interface{}
 	if err := json.Unmarshal([]byte(rawContent), &root); err != nil {
@@ -1787,11 +1797,18 @@ func injectTermuxEnvIfNeeded(rawContent string) string {
 				envMap["LD_PRELOAD"] = libTermuxExec
 			}
 			if _, hasPath := envMap["PATH"]; !hasPath {
+				usrBin := "/data/data/com.antigravity.ai/files/usr/bin"
+				if _, err := os.Stat(usrBin); os.IsNotExist(err) {
+					usrBin = "/data/data/com.termux/files/usr/bin"
+				}
+				if prefix := os.Getenv("PREFIX"); prefix != "" {
+					usrBin = filepath.Join(prefix, "bin")
+				}
 				home, _ := os.UserHomeDir()
 				if home != "" {
-					envMap["PATH"] = filepath.Join(home, ".local", "bin") + ":/data/data/com.termux/files/usr/bin:/system/bin"
+					envMap["PATH"] = filepath.Join(home, ".local", "bin") + ":" + usrBin + ":/system/bin"
 				} else {
-					envMap["PATH"] = "/data/data/com.termux/files/home/.local/bin:/data/data/com.termux/files/usr/bin:/system/bin"
+					envMap["PATH"] = "/data/data/com.antigravity.ai/files/home/.local/bin:" + usrBin + ":/system/bin"
 				}
 			}
 			sMap["env"] = envMap

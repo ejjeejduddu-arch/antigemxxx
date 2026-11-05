@@ -22,7 +22,7 @@ android {
     namespace = "com.example.gemini"
     compileSdk = 36
     defaultConfig {
-        applicationId = "com.antigem"
+        applicationId = "com.antigravity.ai"
         minSdk = 24
         targetSdk = 28
         versionCode = appVersionCode
@@ -40,18 +40,17 @@ android {
 
     flavorDimensions += "mode"
     productFlavors {
-        // Local ports differ per app so com.antigem and com.termux can be installed and run side by side
-        // (com.antigem: +2, so its bridge port never equals com.termux's hub port).
+        // Local ports differ per flavor so standalone and auxiliary instances can run side by side
         create("standard") {
             dimension = "mode"
-            applicationId = "com.antigem"
+            applicationId = "com.antigravity.ai"
             buildConfigField("int", "BRIDGE_PORT", "1236")
             buildConfigField("int", "HUB_PORT", "1237")
             buildConfigField("int", "BROWSER_MCP_PORT", "8767")
         }
         create("termux") {
             dimension = "mode"
-            applicationId = "com.termux"
+            applicationId = "com.antigravity.ai"
             buildConfigField("int", "BRIDGE_PORT", "1234")
             buildConfigField("int", "HUB_PORT", "1235")
             buildConfigField("int", "BROWSER_MCP_PORT", "8765")

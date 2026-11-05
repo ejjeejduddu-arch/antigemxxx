@@ -66,6 +66,11 @@ fun CustomSystemPromptDialog(
     }
 
     val defaultSystemPrompt = remember(dynamicServerPrompt, conversationId, workspaceDir) {
+        val fallbackHome = when {
+            java.io.File("/data/data/com.antigravity.ai/files/home").exists() -> "/data/data/com.antigravity.ai/files/home"
+            java.io.File("/data/data/com.termux/files/home").exists() -> "/data/data/com.termux/files/home"
+            else -> "/data/data/com.antigravity.ai/files/home"
+        }
         dynamicServerPrompt?.takeIf { it.isNotBlank() } ?: """
 <identity>
 You are Antigravity, a powerful agentic AI coding assistant designed by the Google Deepmind team working on Advanced Agentic Coding.
@@ -76,8 +81,8 @@ The USER will send you requests, which you must always prioritize addressing. Us
 <user_information>
 The USER's OS version is linux.
 The user has active workspace:
-${workspaceDir ?: "/data/data/com.termux/files/home/projects/gemini"}
-App Data Directory: /data/data/com.termux/files/home/.gemini/antigravity-cli
+${workspaceDir ?: "$fallbackHome/projects/gemini"}
+App Data Directory: $fallbackHome/.gemini/antigravity-cli
 Conversation ID: ${conversationId ?: "active"}
 </user_information>
 

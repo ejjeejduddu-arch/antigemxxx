@@ -43,9 +43,9 @@ object YouTubeMediaSessionManager {
     private const val CHANNEL_ID = "antigravity_youtube_playback"
     private const val NOTIFICATION_ID = 8092
 
-    const val ACTION_YT_PLAY = "com.antigem.action.YT_PLAY"
-    const val ACTION_YT_PAUSE = "com.antigem.action.YT_PAUSE"
-    const val ACTION_YT_STOP = "com.antigem.action.YT_STOP"
+    const val ACTION_YT_PLAY = "com.antigravity.ai.action.YT_PLAY"
+    const val ACTION_YT_PAUSE = "com.antigravity.ai.action.YT_PAUSE"
+    const val ACTION_YT_STOP = "com.antigravity.ai.action.YT_STOP"
 
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private val mainHandler = Handler(Looper.getMainLooper())

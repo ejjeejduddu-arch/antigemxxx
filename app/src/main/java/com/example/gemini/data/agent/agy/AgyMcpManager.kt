@@ -291,12 +291,24 @@ class AgyMcpManager(
                                 put("cwd", spec.cwd)
                             }
                             val envMap = spec.env.toMutableMap()
-                            // Ensure Termux stdio binaries (npx, python3, etc.) have proper loader and PATH on Android
+                            // Ensure stdio binaries (npx, python3, etc.) have proper loader and PATH on Android
                             if (!envMap.containsKey("LD_PRELOAD")) {
-                                envMap["LD_PRELOAD"] = "/data/data/com.termux/files/usr/lib/libtermux-exec.so"
+                                val termuxExec = when {
+                                    java.io.File("/data/data/com.antigravity.ai/files/usr/lib/libtermux-exec.so").exists() ->
+                                        "/data/data/com.antigravity.ai/files/usr/lib/libtermux-exec.so"
+                                    java.io.File("/data/data/com.termux/files/usr/lib/libtermux-exec.so").exists() ->
+                                        "/data/data/com.termux/files/usr/lib/libtermux-exec.so"
+                                    else -> "/data/data/com.antigravity.ai/files/usr/lib/libtermux-exec.so"
+                                }
+                                envMap["LD_PRELOAD"] = termuxExec
                             }
                             if (!envMap.containsKey("PATH")) {
-                                envMap["PATH"] = "/data/data/com.termux/files/home/.local/bin:/data/data/com.termux/files/usr/bin:/system/bin"
+                                val prefixPath = when {
+                                    java.io.File("/data/data/com.antigravity.ai/files/usr/bin").exists() -> "/data/data/com.antigravity.ai/files"
+                                    java.io.File("/data/data/com.termux/files/usr/bin").exists() -> "/data/data/com.termux/files"
+                                    else -> "/data/data/com.antigravity.ai/files"
+                                }
+                                envMap["PATH"] = "$prefixPath/home/.local/bin:$prefixPath/usr/bin:/system/bin"
                             }
                             if (envMap.isNotEmpty()) {
                                 val envObj = org.json.JSONObject()

@@ -35,7 +35,13 @@ func getGitBinary() string {
 
 func getEnv() []string {
 	env := os.Environ()
-	termuxBin := "/data/data/com.termux/files/usr/bin"
+	termuxBin := "/data/data/com.antigravity.ai/files/usr/bin"
+	if _, err := os.Stat(termuxBin); os.IsNotExist(err) {
+		termuxBin = "/data/data/com.termux/files/usr/bin"
+	}
+	if prefix := os.Getenv("PREFIX"); prefix != "" {
+		termuxBin = filepath.Join(prefix, "bin")
+	}
 	home, _ := os.UserHomeDir()
 	localBin := filepath.Join(home, ".local", "bin")
 	geminiBin := filepath.Join(home, ".gemini", "bin")

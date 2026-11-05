@@ -20,7 +20,7 @@ import java.io.OutputStream
 import java.util.Properties
 
 const val UNIVERSAL_SSH_PATH =
-    "export PATH=\"\$HOME/.local/bin:\$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/data/data/com.termux/files/usr/bin:\$PATH\"; "
+    "export PATH=\"\$HOME/.local/bin:\$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/data/data/com.antigravity.ai/files/usr/bin:/data/data/com.termux/files/usr/bin:\$PATH\"; "
 
 data class TmuxWindowInfo(
     val index: Int,
@@ -1226,7 +1226,7 @@ object LocalTerminalManager {
 
     fun autoLaunchServerIfReady(context: Context) {
         val pkg = context.packageName
-        val isTermux = pkg == "com.termux" || pkg.contains("termux")
+        val isTermux = pkg == "com.antigravity.ai" || pkg == "com.termux" || pkg.contains("termux")
         if (!isTermux) return
 
         if (!LocalEnvironmentManager.isInstalled(context)) {

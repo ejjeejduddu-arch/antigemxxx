@@ -94,8 +94,14 @@ type MkdirReq struct {
 
 func main() {
 	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		homeDir = "/data/data/com.termux/files/home"
+	if err != nil || homeDir == "" {
+		if h := os.Getenv("HOME"); h != "" {
+			homeDir = h
+		} else if _, err := os.Stat("/data/data/com.antigravity.ai/files/home"); err == nil {
+			homeDir = "/data/data/com.antigravity.ai/files/home"
+		} else {
+			homeDir = "/data/data/com.termux/files/home"
+		}
 	}
 	projectsDir := filepath.Join(homeDir, "projects")
 	_ = os.MkdirAll(projectsDir, 0755)

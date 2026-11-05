@@ -109,7 +109,9 @@ class AgyPluginService(
             list.add("file://$h/.gemini/antigravity/mcp_config.json")
         }
 
-        // 3. Android / Termux standard sandboxes
+        // 3. Android / Antigravity / Termux sandboxes
+        list.add("file:///data/data/com.antigravity.ai/files/home/.gemini/config/mcp_config.json")
+        list.add("file:///data/user/0/com.antigravity.ai/files/home/.gemini/config/mcp_config.json")
         list.add("file:///data/data/com.termux/files/home/.gemini/config/mcp_config.json")
         list.add("file:///data/user/0/com.termux/files/home/.gemini/config/mcp_config.json")
 
@@ -186,15 +188,27 @@ class AgyPluginService(
 
                     val envMap = cmdEntry.env.toMutableMap()
                     // Android / Termux environment loader injection
-                    val isAndroidTermux = java.io.File("/data/data/com.termux/files/usr/lib/libtermux-exec.so").exists() ||
+                    val termuxExec = when {
+                        java.io.File("/data/data/com.antigravity.ai/files/usr/lib/libtermux-exec.so").exists() ->
+                            "/data/data/com.antigravity.ai/files/usr/lib/libtermux-exec.so"
+                        java.io.File("/data/data/com.termux/files/usr/lib/libtermux-exec.so").exists() ->
+                            "/data/data/com.termux/files/usr/lib/libtermux-exec.so"
+                        else -> null
+                    }
+                    val isAndroidTermux = termuxExec != null ||
                                           System.getenv("PREFIX") != null ||
                                           (System.getProperty("java.vendor")?.contains("Android", ignoreCase = true) == true)
                     if (isAndroidTermux) {
-                        if (!envMap.containsKey("LD_PRELOAD") && java.io.File("/data/data/com.termux/files/usr/lib/libtermux-exec.so").exists()) {
-                            envMap["LD_PRELOAD"] = "/data/data/com.termux/files/usr/lib/libtermux-exec.so"
+                        if (!envMap.containsKey("LD_PRELOAD") && termuxExec != null) {
+                            envMap["LD_PRELOAD"] = termuxExec
                         }
                         if (!envMap.containsKey("PATH")) {
-                            envMap["PATH"] = "/data/data/com.termux/files/home/.local/bin:/data/data/com.termux/files/usr/bin:/system/bin"
+                            val pkgPrefix = when {
+                                java.io.File("/data/data/com.antigravity.ai/files/usr/bin").exists() -> "/data/data/com.antigravity.ai/files"
+                                java.io.File("/data/data/com.termux/files/usr/bin").exists() -> "/data/data/com.termux/files"
+                                else -> "/data/data/com.antigravity.ai/files"
+                            }
+                            envMap["PATH"] = "$pkgPrefix/home/.local/bin:$pkgPrefix/usr/bin:/system/bin"
                         }
                     }
 
